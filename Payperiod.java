@@ -4,8 +4,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 public class Payperiod {
-    
-    // Class to represent an employee
     static class Employee {
         String employeeNumber;
         String employeeName;
