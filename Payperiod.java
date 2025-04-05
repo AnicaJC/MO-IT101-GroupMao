@@ -114,21 +114,16 @@ public class Payperiod {
             // Calculate gross salary (8 hours/day)
             double grossSalary = workDays * 8 * selectedEmployee.hourlyRate;
             
-            // Calculate deductions proportionally (e.g., 3 days worked → 3/5 of weekly deductions)
-            double deductionFactor = Math.min(workDays / 5.0, 1.0); // Max 100% for full week
+            // Calculate deductions proportionally
+            double deductionFactor = Math.min(workDays / 5.0, 1.0);
             double sssWeekly = (selectedEmployee.sssMonthly / 4) * deductionFactor;
             double pagIbigWeekly = (selectedEmployee.pagIbigMonthly / 4) * deductionFactor;
             double philhealthWeekly = (selectedEmployee.philhealthMonthly / 4) * deductionFactor;
             double withholdingTaxWeekly = (selectedEmployee.withholdingTaxMonthly / 4) * deductionFactor;
             
-            // Total deductions (unchanged)
             double totalWeeklyDeductions = sssWeekly + pagIbigWeekly + philhealthWeekly + withholdingTaxWeekly;
-            
-            // Net salary calculation (unchanged)
             double netSalary = calculateNetSalary(grossSalary, totalWeeklyDeductions);
 
-            
-            //System.out.println("Days between: " + Math.abs(daysBetween));
             System.out.println("Your net is: $"+netSalary);
 
         } else {
