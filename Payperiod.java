@@ -4,6 +4,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 public class Payperiod {
+    
     static class Employee {
         String employeeNumber;
         String employeeName;
@@ -26,7 +27,12 @@ public class Payperiod {
             this.philhealthMonthly = philhealthMonthly;
             this.withholdingTaxMonthly = withholdingTaxMonthly;
         }
+
+        public String toStringEmpDetails(double netSalary) {
+            return String.format("| %-8s| %-21s | %-9.2f | %-9.2f |", employeeNumber, employeeName, hourlyRate, netSalary);
+        }
     }
+
     public static double calculateGrossSalary(double hoursWorked, double hourlyRate) {
         return hoursWorked * hourlyRate;
     }
@@ -76,57 +82,42 @@ public class Payperiod {
         Scanner scanner = new Scanner(System.in);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         
-        System.out.print("Enter Employee Number to retrieve data: ");
-        String searchEmployeeNumber = scanner.nextLine();
-
-        // Search for the employee
-        Employee selectedEmployee = null;
-        for (Employee employee : employees) {
-            if (employee.employeeNumber.equals(searchEmployeeNumber)) {
-                selectedEmployee = employee;
-                break;
-            }
-        }
+        System.out.println("Please Enter date period below (MM/DD/YYYY)");
+        System.out.print("Enter starting period: ");
+        String firstDate = scanner.nextLine();
+        System.out.print("Enter end period: ");
+        String secondDate = scanner.nextLine();
         
-        if (selectedEmployee != null) {
-            System.out.println("\nEmployee Information:");
-            System.out.println("Employee Number: " + selectedEmployee.employeeNumber);
-            System.out.println("Employee Name: " + selectedEmployee.employeeName);
-            System.out.println("Employee Birthday: " + selectedEmployee.birthday);
-            
-            System.out.println("Please Enter date period below (MM/DD/YYYY)");
-            System.out.print("Enter starting period: ");
-            String firstDate = scanner.nextLine();
-            System.out.print("Enter end period: ");
-            String secondDate = scanner.nextLine();
-            
-            LocalDate date1 = LocalDate.parse(firstDate, formatter);
-            LocalDate date2 = LocalDate.parse(secondDate, formatter);
-            long daysBetween = Math.abs(ChronoUnit.DAYS.between(date1, date2));
-            
-            // Calculate actual work days (Monday-Friday)
-            long workDays = date1.datesUntil(date2.plusDays(1)) // Include end date
-                             .filter(d -> d.getDayOfWeek().getValue() < 6) // 1-5 = Mon-Fri
-                             .count();
-            
+        LocalDate date1 = LocalDate.parse(firstDate, formatter);
+        LocalDate date2 = LocalDate.parse(secondDate, formatter);
+        long daysBetween = Math.abs(ChronoUnit.DAYS.between(date1, date2));
+        
+        // Calculate actual work days (Monday-Friday)
+        long workDays = date1.datesUntil(date2.plusDays(1)) // Include end date
+                         .filter(d -> d.getDayOfWeek().getValue() < 6) // 1-5 = Mon-Fri
+                         .count();
+        
+        System.out.println("+---------------------------------------------------------+");
+        System.out.println("|  Emp #  |      Full Name        |  Rate/Hr  |    Net    |");
+        System.out.println("+---------------------------------------------------------+");
+        
+        for (Employee employee : employees) {
             // Calculate gross salary (8 hours/day)
-            double grossSalary = workDays * 8 * selectedEmployee.hourlyRate;
+            double grossSalary = workDays * 8 * employee.hourlyRate;
             
             // Calculate deductions proportionally
             double deductionFactor = Math.min(workDays / 5.0, 1.0);
-            double sssWeekly = (selectedEmployee.sssMonthly / 4) * deductionFactor;
-            double pagIbigWeekly = (selectedEmployee.pagIbigMonthly / 4) * deductionFactor;
-            double philhealthWeekly = (selectedEmployee.philhealthMonthly / 4) * deductionFactor;
-            double withholdingTaxWeekly = (selectedEmployee.withholdingTaxMonthly / 4) * deductionFactor;
+            double sssWeekly = (employee.sssMonthly / 4) * deductionFactor;
+            double pagIbigWeekly = (employee.pagIbigMonthly / 4) * deductionFactor;
+            double philhealthWeekly = (employee.philhealthMonthly / 4) * deductionFactor;
+            double withholdingTaxWeekly = (employee.withholdingTaxMonthly / 4) * deductionFactor;
             
             double totalWeeklyDeductions = sssWeekly + pagIbigWeekly + philhealthWeekly + withholdingTaxWeekly;
             double netSalary = calculateNetSalary(grossSalary, totalWeeklyDeductions);
-
-            System.out.println("Your net is: $"+netSalary);
-
-        } else {
-            System.out.println("Employee not found!");
+            
+            System.out.println(employee.toStringEmpDetails(netSalary));
         }
+        System.out.println("+---------------------------------------------------------+");
         
         scanner.close();
     }
