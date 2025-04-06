@@ -32,7 +32,7 @@ public class Motorph {
             return String.format("| %-8s| %-21s | %-9.2f | %-9.2f |", employeeNumber, employeeName, hourlyRate, netSalary);
         }
         public String toString() {
-            return String.format("| %-8d| %-20s  | %s  |", employeeNumber, employeeName, birthday);
+            return String.format("| %-8s| %-20s  | %s  |", employeeNumber, employeeName, birthday);
         }
     }
 
@@ -105,20 +105,20 @@ public class Motorph {
                     System.out.println("|       Employee Management       |");
                     System.out.println("+---------------------------------+\n");
 
-                    System.out.println("+------------------------------------------------+");
-                    System.out.println("|  Emp #  |       Full Name        |  Birthday   |");
-                    System.out.println("+------------------------------------------------+");
+                    System.out.println("+-----------------------------------------------+");
+                    System.out.println("|  Emp #  |       Full Name       |  Birthday   |");
+                    System.out.println("+-----------------------------------------------+");
                     for (Employee employee : employees) {
                         System.out.println(employee);
                     }
-                    System.out.println("+------------------------------------------------+");
+                    System.out.println("+-----------------------------------------------+");
                 }
 
                 if (admin.equals("2")) {
                     System.out.println("\n+---------------------------------+");
                     System.out.println("|         Employee Details        |");
                     System.out.println("+---------------------------------+\n");
-    
+                    System.out.println("Unavailable.");
     
                 }
 
@@ -244,7 +244,7 @@ public class Motorph {
                     System.out.printf("  PAG-IBIG Weekly Deduction: $%.2f\n", pagIbigWeekly);
                     System.out.printf("  PhilHealth Weekly Deduction: $%.2f\n", philhealthWeekly);
                     System.out.printf("  Withholding Tax Weekly Deduction: $%.2f\n", withholdingTaxWeekly);
-                    System.out.println("  Net Weekly Salary (after deductions): $" + netSalary);
+                    System.out.printf("  Net Weekly Salary (after deductions): $" + netSalary);
                 } else {
                     System.out.println("Employee not found.");
                 }
